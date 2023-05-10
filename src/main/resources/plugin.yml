@@ -1,0 +1,4 @@
+name: Invoker
+version: '${project.version}'
+main: dev.kutuptilkisi.invoker.Invoker
+api-version: 1.16
