@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EventRegistry {
-    public static HashMap<Class<? extends Packet>, Map.Entry<Object, List<Method>>> eventCallbacks = new HashMap<>();
+    private static HashMap<Class<? extends Packet>, Map.Entry<Object, List<Method>>> eventCallbacks = new HashMap<>();
 
     static {
         registerEvent(new AuthorizationListener());

@@ -8,6 +8,7 @@ import dev.kutuptilkisi.invoker.util.Counter;
 import java.io.IOException;
 import java.net.Socket;
 public class Client {
+    //TODO: Change ClientID system
     private static int CLIENTID = 0;
 
     private final Socket socket;

@@ -59,6 +59,15 @@ public class NetHandler {
         return authKey;
     }
 
+    public Client getClient(int clientID){
+        for(Client client : clients){
+            if(client.getClientID() == clientID){
+                return client;
+            }
+        }
+        return null;
+    }
+
     public void addClient(Client client){
         ClientConnectPacket connectPacket = new ClientConnectPacket(client.getClientID());
         Bukkit.getPluginManager().callEvent(connectPacket);
