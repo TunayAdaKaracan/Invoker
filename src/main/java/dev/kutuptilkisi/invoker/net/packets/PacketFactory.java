@@ -11,8 +11,12 @@ public class PacketFactory {
     private static final HashMap<Integer, Supplier<Packet>> packetFactory = new HashMap<>();
 
     static {
-        packetFactory.put(new AuthorizationPacket().packetID(), AuthorizationPacket::new);
-        packetFactory.put(new RouteRequestPacket().packetID(), RouteRequestPacket::new);
+        registerPacket(new AuthorizationPacket().packetID(), AuthorizationPacket::new);
+        registerPacket(new RouteRequestPacket().packetID(), RouteRequestPacket::new);
+    }
+
+    public static void registerPacket(int packetID, Supplier<Packet> packetSupplier){
+        packetFactory.put(packetID, packetSupplier);
     }
 
     public static  <T extends Packet> T fromId(int id){

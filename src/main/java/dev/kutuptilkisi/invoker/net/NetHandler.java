@@ -34,6 +34,10 @@ public class NetHandler {
         this.clients = new ArrayList<>();
         this.isRunning = true;
 
+        ConnectionListener connectionListener = new ConnectionListener();
+        connectionListener.setDaemon(true);
+        connectionListener.start();
+
         PacketSender sender = new PacketSender();
         sender.setDaemon(true);
         sender.start();

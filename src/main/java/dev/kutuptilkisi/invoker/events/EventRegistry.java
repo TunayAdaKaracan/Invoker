@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Map;
 
 public class EventRegistry {
-    private static HashMap<Class<? extends Packet>, Map.Entry<Object, List<Method>>> eventCallbacks = new HashMap<>();
+    public static HashMap<Class<? extends Packet>, Map.Entry<Object, List<Method>>> eventCallbacks = new HashMap<>();
 
     static {
-        register(new AuthorizationListener());
-        register(new RouterListener());
+        registerEvent(new AuthorizationListener());
+        registerEvent(new RouterListener());
     }
 
-    public static void register(Object o){
+    public static void registerEvent(Object o){
         for(Method method : o.getClass().getMethods()){
             if(method.getParameterCount() == 2){
                 Class<?>[] types = method.getParameterTypes();
@@ -47,6 +47,10 @@ public class EventRegistry {
         }
     }
 
+    public static void clearEventsOf(Class<? extends Packet> packetClazz){
+        eventCallbacks.remove(packetClazz);
+    }
+
     private static boolean isImplementingPaketInterface(Class<?> clazz){
         for(Class<?> clazzz : clazz.getInterfaces()){
             if(clazzz == Packet.class){
@@ -55,6 +59,4 @@ public class EventRegistry {
         }
         return false;
     }
-
-
 }

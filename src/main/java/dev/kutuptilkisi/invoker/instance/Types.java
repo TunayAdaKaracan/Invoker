@@ -11,7 +11,8 @@ public enum Types {
     INT(new IntTypeIO(), 'I'),
     DOUBLE(new DoubleTypeIO(), 'D'),
     FLOAT(new FloatTypeIO(), 'F'),
-    LONG(new LongTypeIO(), 'L');
+    LONG(new LongTypeIO(), 'L'),
+    BYTE(new ByteTypeIO(), 'B');
 
     private final TypeIO typeIO;
     private final char representation;
