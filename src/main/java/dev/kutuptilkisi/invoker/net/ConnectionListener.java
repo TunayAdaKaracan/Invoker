@@ -2,6 +2,7 @@ package dev.kutuptilkisi.invoker.net;
 
 import dev.kutuptilkisi.invoker.Invoker;
 import dev.kutuptilkisi.invoker.instance.Client;
+import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.InformationPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.UnauthorizedClientConnectPacket;
 import org.bukkit.Bukkit;
 
@@ -16,6 +17,10 @@ public class ConnectionListener extends Thread {
             try {
                 Socket socket = handler.getServer().accept();
                 Client client = new Client(socket);
+
+                InformationPacket informationPacket = new InformationPacket();
+                informationPacket.setClientID(client.getClientID());
+                client.send(informationPacket);
 
                 // TODO: Broadcast?
                 UnauthorizedClientConnectPacket event = new UnauthorizedClientConnectPacket(client.getClientID());

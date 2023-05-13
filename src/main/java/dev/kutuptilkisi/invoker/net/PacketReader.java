@@ -37,8 +37,7 @@ public class PacketReader extends Thread{
                     }
 
                     EventRegistry.fireEvent(client, packet);
-                    if(packet instanceof Event) {
-                        Event bukkitEvent = (Event) packet;
+                    if(packet instanceof Event bukkitEvent) {
                         Bukkit.getPluginManager().callEvent(bukkitEvent);
                     }
                 } else {
