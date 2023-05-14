@@ -39,7 +39,7 @@ public class RouteResponsePacket implements Packet {
         Packet.super.write(dos);
         dos.writeInt(responseID);
         dos.writeUTF(routeName);
-        dos.writeUTF(argType != null ? String.valueOf(argType.getRepresentation()) : "v");
+        dos.writeUTF(argType != null ? String.valueOf(argType.getRepresentation()) : "V");
         if(argType != null){
             argType.getTypeIO().write(dos, arg);
         }
