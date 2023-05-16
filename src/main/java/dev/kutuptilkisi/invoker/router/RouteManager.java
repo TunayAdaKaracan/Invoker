@@ -1,6 +1,7 @@
 package dev.kutuptilkisi.invoker.router;
 
 import dev.kutuptilkisi.invoker.router.impl.RouteData;
+import dev.kutuptilkisi.invoker.util.Logger;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class RouteManager {
     }
 
     private void addRoute(RouteData routeData){
+        Logger.info("New route registered with name of: "+routeData.getFullName());
         this.routes.add(routeData);
     }
 

@@ -1,3 +1,5 @@
 network:
   port: 8080
   auth-key: "kutup is awesome"
+
+debug: true

@@ -27,6 +27,7 @@ public final class Invoker extends JavaPlugin {
         routeManager = new RouteManager();
         try {
             netHandler = new NetHandler(getConfig().getInt("network.port"), getConfig().getString("network.auth-key"));
+            netHandler.start();
         } catch (IOException e) {
             getLogger().severe("Can't create a socket server!");
             throw new RuntimeException(e);

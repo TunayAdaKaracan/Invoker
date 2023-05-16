@@ -4,6 +4,7 @@ import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientConnectPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientDisconnectPacket;
+import dev.kutuptilkisi.invoker.util.Logger;
 import org.bukkit.Bukkit;
 
 import java.io.IOException;
@@ -32,15 +33,22 @@ public class NetHandler {
 
         this.packetQueue = new HashMap<>();
         this.clients = new ArrayList<>();
-        this.isRunning = true;
+        this.isRunning = false;
+    }
 
+    public void start(){
+        this.isRunning = true;
         ConnectionListener connectionListener = new ConnectionListener();
         connectionListener.setDaemon(true);
+        Logger.info("Starting connection listener...");
         connectionListener.start();
+        Logger.info("Connection Listener Started");
 
         PacketSender sender = new PacketSender();
+        Logger.info("Starting packet sender...");
         sender.setDaemon(true);
         sender.start();
+        Logger.info("Started packet sender...");
     }
 
     public HashMap<Client, List<Packet>> getPacketQueue() {

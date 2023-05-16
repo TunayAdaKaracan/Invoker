@@ -1,7 +1,6 @@
 package dev.kutuptilkisi.invoker.instance;
 
 import dev.kutuptilkisi.invoker.Invoker;
-import dev.kutuptilkisi.invoker.net.NetHandler;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
 import dev.kutuptilkisi.invoker.util.Counter;
 
