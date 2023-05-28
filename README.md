@@ -57,7 +57,7 @@ With your own packets of course!
 **Incoming Packets**:
 Lets say you want to make a BanPlayerPacket and for some reason you don't want to use a route for that. This is how you can create a packet:
 ```java
-public class BanPlayerPacket implements Packet { // Every 
+public class BanPlayerPacket implements Packet { // Every incoming packet can also extend Bukkit Event. They are fired automatically.
 
     private String userName;
 
