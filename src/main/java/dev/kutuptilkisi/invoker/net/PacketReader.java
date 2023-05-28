@@ -51,7 +51,6 @@ public class PacketReader extends Thread{
             } catch (IOException e) {
                 Logger.warning("Error on PacketReader: "+client.getClientID());
                 this.client.close();
-                throw new RuntimeException(e);
             }
         }
     }

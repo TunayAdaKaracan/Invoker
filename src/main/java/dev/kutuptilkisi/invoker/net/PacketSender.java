@@ -25,7 +25,6 @@ public class PacketSender extends Thread {
                             packet.write(dataOutputStream);
                         }
                         dataOutputStream.flush();
-                        dataOutputStream.close();
                     } catch (IOException e) {
                         Logger.warning("Error on PacketSender: "+client.getClientID());
                         client.close();
