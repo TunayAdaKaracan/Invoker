@@ -18,6 +18,7 @@ public class RouterListener {
         if(routeData == null){
             RouteNotFoundPacket routeNotFoundPacket = new RouteNotFoundPacket();
             routeNotFoundPacket.setRouteName(packet.getRouteName());
+            routeNotFoundPacket.setResponseID(client.getRouteRequestCounter().getCount());
             client.send(routeNotFoundPacket);
             client.getRouteRequestCounter().increase();
             return;

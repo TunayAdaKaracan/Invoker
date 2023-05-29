@@ -4,6 +4,7 @@ import dev.kutuptilkisi.invoker.Invoker;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.net.packets.impl.incoming.AuthorizationPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.InformationPacket;
+import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ServerRejectClientPacket;
 import dev.kutuptilkisi.invoker.util.Logger;
 
 public class AuthorizationListener {
@@ -20,6 +21,10 @@ public class AuthorizationListener {
             client.send(informationPacket);
 
             Invoker.getInstance().getNetHandler().addClient(client);
+            return;
         }
+        ServerRejectClientPacket rejectClientPacket = new ServerRejectClientPacket();
+        client.send(rejectClientPacket);
+        client.close();
     }
 }

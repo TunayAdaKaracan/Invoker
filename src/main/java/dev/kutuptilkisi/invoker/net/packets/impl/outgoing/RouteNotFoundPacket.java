@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class RouteNotFoundPacket implements Packet {
+    private int responseID;
     private String routeName;
 
     @Override
@@ -17,9 +18,14 @@ public class RouteNotFoundPacket implements Packet {
         this.routeName = routeName;
     }
 
+    public void setResponseID(int responseID){
+        this.responseID = responseID;
+    }
+
     @Override
     public void write(DataOutputStream dos) throws IOException {
         Packet.super.write(dos);
+        dos.writeInt(responseID);
         dos.writeUTF(routeName);
     }
 }
