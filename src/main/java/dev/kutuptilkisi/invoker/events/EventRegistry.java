@@ -1,25 +1,24 @@
 package dev.kutuptilkisi.invoker.events;
 
+import dev.kutuptilkisi.invoker.events.impl.AuthorizationListener;
+import dev.kutuptilkisi.invoker.events.impl.RouterListener;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventRegistry {
-    private static HashMap<Class<? extends Packet>, Map.Entry<Object, List<Method>>> eventCallbacks = new HashMap<>();
+    private static HashMap<Class<? extends Packet>, Map.Entry<PacketListener, List<Method>>> eventCallbacks = new HashMap<>();
 
     static {
         registerEvent(new AuthorizationListener());
         registerEvent(new RouterListener());
     }
 
-    public static void registerEvent(Object o){
-        for(Method method : o.getClass().getMethods()){
+    public static void registerEvent(PacketListener o){
+        for(Method method : Arrays.stream(o.getClass().getMethods()).filter(method -> method.isAnnotationPresent(PacketHandler.class)).toList()){
             if(method.getParameterCount() == 2){
                 Class<?>[] types = method.getParameterTypes();
                 if(types[0] == Client.class && isImplementingPaketInterface(types[1])){

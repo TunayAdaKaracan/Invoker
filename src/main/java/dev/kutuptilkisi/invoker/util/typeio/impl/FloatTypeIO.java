@@ -1,24 +1,24 @@
-package dev.kutuptilkisi.invoker.util.impl;
+package dev.kutuptilkisi.invoker.util.typeio.impl;
 
-import dev.kutuptilkisi.invoker.util.TypeIO;
+import dev.kutuptilkisi.invoker.util.typeio.TypeIO;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class LongTypeIO implements TypeIO {
+public class FloatTypeIO implements TypeIO {
     @Override
     public boolean fromClass(Object obj) {
-        return obj instanceof Long;
+        return obj instanceof Float;
     }
 
     @Override
     public Object read(DataInputStream dataInputStream) throws IOException {
-        return dataInputStream.readLong();
+        return dataInputStream.readFloat();
     }
 
     @Override
     public void write(DataOutputStream dataOutputStream, Object arg) throws IOException {
-        dataOutputStream.writeLong((Long) arg);
+        dataOutputStream.writeFloat((Float) arg);
     }
 }

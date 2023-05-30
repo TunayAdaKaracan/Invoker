@@ -1,24 +1,24 @@
-package dev.kutuptilkisi.invoker.util.impl;
+package dev.kutuptilkisi.invoker.util.typeio.impl;
 
-import dev.kutuptilkisi.invoker.util.TypeIO;
+import dev.kutuptilkisi.invoker.util.typeio.TypeIO;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class FloatTypeIO implements TypeIO {
+public class DoubleTypeIO implements TypeIO {
     @Override
     public boolean fromClass(Object obj) {
-        return obj instanceof Float;
+        return obj instanceof Double;
     }
 
     @Override
     public Object read(DataInputStream dataInputStream) throws IOException {
-        return dataInputStream.readFloat();
+        return dataInputStream.readDouble();
     }
 
     @Override
     public void write(DataOutputStream dataOutputStream, Object arg) throws IOException {
-        dataOutputStream.writeFloat((Float) arg);
+        dataOutputStream.writeDouble((Double) arg);
     }
 }

@@ -107,9 +107,14 @@ public class NetHandler {
     }
 
     public void close(){
-        this.isRunning = true;
+        this.isRunning = false;
         for(Client client : clients){
             client.close();
+        }
+        try {
+            this.server.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

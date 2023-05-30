@@ -1,6 +1,7 @@
 package dev.kutuptilkisi.invoker.instance;
 
 import dev.kutuptilkisi.invoker.Invoker;
+import dev.kutuptilkisi.invoker.instance.intents.ClientIntents;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
 import dev.kutuptilkisi.invoker.util.Counter;
 
@@ -17,6 +18,7 @@ public class Client {
     private boolean isAuthorized;
 
     private final Counter routeRequestCounter;
+    private final ClientIntents clientIntents;
 
     public Client(Socket socket){
         this.socket = socket;
@@ -26,6 +28,7 @@ public class Client {
         this.isAuthorized = false;
 
         this.routeRequestCounter = new Counter();
+        this.clientIntents = ClientIntents.defaultPackets();
     }
 
     public Socket getSocket() {
@@ -34,6 +37,10 @@ public class Client {
 
     public int getClientID() {
         return clientID;
+    }
+
+    public ClientIntents getClientIntents(){
+        return clientIntents;
     }
 
     public boolean isConnected() {

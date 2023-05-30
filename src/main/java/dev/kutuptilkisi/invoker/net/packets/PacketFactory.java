@@ -2,6 +2,7 @@ package dev.kutuptilkisi.invoker.net.packets;
 
 
 import dev.kutuptilkisi.invoker.net.packets.impl.incoming.AuthorizationPacket;
+import dev.kutuptilkisi.invoker.net.packets.impl.incoming.EnableCustomPacketPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.incoming.RouteRequestPacket;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class PacketFactory {
     static {
         registerPacket(new AuthorizationPacket().packetID(), AuthorizationPacket::new);
         registerPacket(new RouteRequestPacket().packetID(), RouteRequestPacket::new);
+        registerPacket(new EnableCustomPacketPacket().packetID(), EnableCustomPacketPacket::new);
     }
 
     public static void registerPacket(int packetID, Supplier<Packet> packetSupplier){

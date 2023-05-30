@@ -21,8 +21,10 @@ public class PacketSender extends Thread {
                     try {
                         DataOutputStream dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
                         for(Packet packet : packetsToSend.getValue()){
-                            Logger.info("Sending packet "+ packet.packetID() +" to client "+client.getClientID());
-                            packet.write(dataOutputStream);
+                            if(client.getClientIntents().isEnabled(packet.packetID())){
+                                Logger.info("Sending packet "+ packet.packetID() +" to client "+client.getClientID());
+                                packet.write(dataOutputStream);
+                            }
                         }
                         dataOutputStream.flush();
                     } catch (IOException e) {

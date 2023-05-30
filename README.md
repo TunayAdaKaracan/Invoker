@@ -91,19 +91,22 @@ This is actually bad practice to create an empty packet to just get the id. But 
 Wait... but why add a packet if i can't trigger an event when it is sent?
 Well... Here we go again. We have another structure called EventRegistry. Which fires events based on incoming packet.
 This is what it looks like in our code:
+
 ```java
-public class BanPacketListener {
+public class BanPacketListener implements PacketListener {
 
     private final TestPlugin testPlugin;
-    public BanPacketListener(TestPlugin testPlugin){
+
+    public BanPacketListener(TestPlugin testPlugin) {
         this.testPlugin = testPlugin;
     }
 
-    public void onBanPacket(Client client, BanPlayerPacket banPlayerPacket){
+    @PacketHandler
+    public void onBanPacket(Client client, BanPlayerPacket banPlayerPacket) {
         // Events are called async. You need to use #runTask in order to use any operation that must be done in sync.
         Bukkit.getScheduler().runTask(testPlugin, () -> {
             Player player = Bukkit.getPlayer(banPlayerPacket.getUserName());
-            if(player != null){
+            if (player != null) {
                 Bukkit.getBanList(BanList.Type.NAME).addBan(banPlayerPacket.getUserName(), null, null, null);
                 player.kickPlayer("You are banned from server");
             }
@@ -111,7 +114,6 @@ public class BanPacketListener {
     }
 }
 ```
-Yeah yeah, i know. I can hear you guys saying "Why there is no annotation or an inherited interface?". Well, i just copied this EventRegistry from one of my old projects (Fix is soon).
 Now the last step is to register this Custom Packet Listener.
 ```java
 EventRegistry.registerEvent(new BanPacketListener(this));
@@ -191,10 +193,10 @@ This is why invoker is actually a powerfull tool to use.
 
 ### Todo:
 
- - [ ] Fix Protocol
+ - [x] Fix Protocol
  - [ ] Add Websocket Support
  - [ ] Create more official wrappers
- - [ ] Fix EventRegistry
+ - [x] Fix EventRegistry
 
 
 ## Official Wrappers (More soon)

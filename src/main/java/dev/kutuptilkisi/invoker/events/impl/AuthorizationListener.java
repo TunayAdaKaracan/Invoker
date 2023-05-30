@@ -1,14 +1,17 @@
-package dev.kutuptilkisi.invoker.events;
+package dev.kutuptilkisi.invoker.events.impl;
 
 import dev.kutuptilkisi.invoker.Invoker;
+import dev.kutuptilkisi.invoker.events.PacketHandler;
+import dev.kutuptilkisi.invoker.events.PacketListener;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.net.packets.impl.incoming.AuthorizationPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.InformationPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ServerRejectClientPacket;
 import dev.kutuptilkisi.invoker.util.Logger;
 
-public class AuthorizationListener {
+public class AuthorizationListener implements PacketListener {
 
+    @PacketHandler
     public void onAuthorizationPacket(Client client, AuthorizationPacket packet){
         Logger.info("Authorization Packet Event for Client: "+client.getClientID());
         if(Invoker.getInstance().getNetHandler().getAuthKey().equals(packet.getAuthKey())){

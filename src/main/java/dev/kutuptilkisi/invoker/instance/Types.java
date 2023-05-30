@@ -1,10 +1,7 @@
 package dev.kutuptilkisi.invoker.instance;
 
-import dev.kutuptilkisi.invoker.util.TypeIO;
-import dev.kutuptilkisi.invoker.util.impl.*;
-
-import java.io.DataInputStream;
-import java.io.IOException;
+import dev.kutuptilkisi.invoker.util.typeio.TypeIO;
+import dev.kutuptilkisi.invoker.util.typeio.impl.*;
 
 public enum Types {
     STRING(new StringTypeIO(), 'S'),
@@ -12,17 +9,14 @@ public enum Types {
     DOUBLE(new DoubleTypeIO(), 'D'),
     FLOAT(new FloatTypeIO(), 'F'),
     LONG(new LongTypeIO(), 'L'),
-    BYTE(new ByteTypeIO(), 'B');
+    BYTE(new ByteTypeIO(), 'B'),
+    VOID(new VoidTypeIO(), 'V');
 
     private final TypeIO typeIO;
     private final char representation;
     Types(TypeIO typeIO, char repr){
         this.typeIO = typeIO;
         this.representation = repr;
-    }
-
-    public Object readFrom(DataInputStream dis) throws IOException {
-        return typeIO.read(dis);
     }
 
     public char getRepresentation() {

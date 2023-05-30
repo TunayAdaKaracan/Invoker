@@ -1,6 +1,6 @@
-package dev.kutuptilkisi.invoker.util.impl;
+package dev.kutuptilkisi.invoker.util.typeio.impl;
 
-import dev.kutuptilkisi.invoker.util.TypeIO;
+import dev.kutuptilkisi.invoker.util.typeio.TypeIO;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

@@ -34,7 +34,7 @@ public class RouteRequestPacket implements Packet {
         for(char c : argsCount.toCharArray()){
             Types type = Types.fromCharacter(c);
             if(type == null) continue;
-            this.args.add(type.readFrom(dis));
+            this.args.add(type.getTypeIO().read(dis));
         }
     }
 }
