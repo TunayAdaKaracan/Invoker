@@ -152,6 +152,7 @@ public class ChatPacket implements Packet {
 }
 ```
 **IMPORTANT**: You have to put `Packet.super.write(dos);`. This basically writes the packet id to DataOutputStream hence it is a must.
+**IMPORTANT 2**: Don't forget to enable intents for the custom packets you want your client to get. Otherwise they will not be sent to your client as server think there will be version incompabilities
 
 Then ofcourse we want to send the packet, aren't we?
 In this example you will also see all ways to send a packet to a client.
