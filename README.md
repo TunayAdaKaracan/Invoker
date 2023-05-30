@@ -1,6 +1,6 @@
 # Invoker
-Invoker is a remote communication library for bukkit and softwares. Invoker uses sockets to communicate with plugin on server side. Invoker is highly developer friendly and is easy to use as well as easy to extend and add new features such as new packets to plugin.
-
+Invoker is a remote communication library for bukkit and softwares. Invoker uses sockets to communicate with plugin on server side. Invoker is highly developer friendly and is easy to use as well as easy to extend and add new features such as new packets to plugin. <br>
+[![](https://jitpack.io/v/TunayAdaKaracan/Invoker.svg)](https://jitpack.io/#TunayAdaKaracan/Invoker)
 ## How to use? (Docs)
 
 ##### Routables:
@@ -152,6 +152,7 @@ public class ChatPacket implements Packet {
 }
 ```
 **IMPORTANT**: You have to put `Packet.super.write(dos);`. This basically writes the packet id to DataOutputStream hence it is a must.
+**IMPORTANT 2**: Don't forget to enable intents for the custom packets you want your client to get. Otherwise they will not be sent to your client as server think there will be version incompabilities
 
 Then ofcourse we want to send the packet, aren't we?
 In this example you will also see all ways to send a packet to a client.
