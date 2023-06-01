@@ -1,6 +1,7 @@
 package dev.kutuptilkisi.invoker.events;
 
 import dev.kutuptilkisi.invoker.events.impl.AuthorizationListener;
+import dev.kutuptilkisi.invoker.events.impl.PacketEnableListener;
 import dev.kutuptilkisi.invoker.events.impl.RouterListener;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
@@ -15,6 +16,7 @@ public class EventRegistry {
     static {
         registerEvent(new AuthorizationListener());
         registerEvent(new RouterListener());
+        registerEvent(new PacketEnableListener());
     }
 
     public static void registerEvent(PacketListener o){

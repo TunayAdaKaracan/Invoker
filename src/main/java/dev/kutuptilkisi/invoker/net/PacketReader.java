@@ -41,8 +41,8 @@ public class PacketReader extends Thread{
                     }
 
                     EventRegistry.fireEvent(client, packet);
-                    if(packet instanceof Event bukkitEvent) {
-                        Bukkit.getPluginManager().callEvent(bukkitEvent);
+                    if(packet instanceof Event) {
+                        Bukkit.getPluginManager().callEvent((Event) packet);
                     }
                 } else {
                     Logger.warning("Packet is unknown. Resetting datastream. Client ID: "+client.getClientID());

@@ -24,6 +24,8 @@ public class PacketSender extends Thread {
                             if(client.getClientIntents().isEnabled(packet.packetID())){
                                 Logger.info("Sending packet "+ packet.packetID() +" to client "+client.getClientID());
                                 packet.write(dataOutputStream);
+                            }else {
+                                Logger.info("Skipped packet of "+packet.packetID()+" as it is not in client's intents.");
                             }
                         }
                         dataOutputStream.flush();

@@ -1,5 +1,6 @@
 package dev.kutuptilkisi.invoker.net;
 
+import com.google.gson.Gson;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientConnectPacket;
@@ -24,6 +25,8 @@ public class NetHandler {
 
     private volatile boolean isRunning;
 
+    private volatile Gson gson;
+
 
     public NetHandler(int port, String authKey) throws IOException {
         this.PORT = port;
@@ -34,6 +37,8 @@ public class NetHandler {
         this.packetQueue = new HashMap<>();
         this.clients = new ArrayList<>();
         this.isRunning = false;
+
+        this.gson = new Gson();
     }
 
     public void start(){
@@ -65,6 +70,10 @@ public class NetHandler {
 
     public String getAuthKey() {
         return authKey;
+    }
+
+    public Gson getGson(){
+        return gson;
     }
 
     public Client getClient(int clientID){

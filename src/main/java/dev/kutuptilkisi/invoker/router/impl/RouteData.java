@@ -1,5 +1,6 @@
 package dev.kutuptilkisi.invoker.router.impl;
 
+import dev.kutuptilkisi.invoker.Invoker;
 import dev.kutuptilkisi.invoker.instance.Types;
 import dev.kutuptilkisi.invoker.router.Routable;
 import dev.kutuptilkisi.invoker.router.Route;
@@ -31,6 +32,9 @@ public class RouteData {
     public Pair<Types, Object> executeRoute(Object[] args) throws InvocationTargetException, IllegalAccessException {
         this.method.setAccessible(true);
         Object ret = this.method.invoke(this.routable, args);
+        if(ret != null && Types.fromObject(ret) == null){
+            return new Pair<>(Types.STRING, Invoker.getInstance().getNetHandler().getGson().toJson(ret));
+        }
         return new Pair<>(Types.fromObject(ret), ret);
     }
 }
