@@ -66,7 +66,7 @@ public class Client {
     public void close(){
         this.isConnected = false;
         try {
-            Invoker.getInstance().getNetHandler().removeClient(this);
+            Invoker.invokerAPI.getNetHandler().removeClient(this);
             socket.close();
         } catch (IOException e) {
             throw new RuntimeException(e);

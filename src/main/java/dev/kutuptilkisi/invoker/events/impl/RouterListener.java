@@ -17,7 +17,7 @@ public class RouterListener implements PacketListener {
 
     @PacketHandler
     public void onRouteRequest(Client client, RouteRequestPacket packet){
-        RouteData routeData = Invoker.getInstance().getRouteManager().getRouteOrNull(packet.getRouteName());
+        RouteData routeData = Invoker.invokerAPI.getRouteManager().getRouteOrNull(packet.getRouteName());
         if(routeData == null){
             RouteNotFoundPacket routeNotFoundPacket = new RouteNotFoundPacket();
             routeNotFoundPacket.setRouteName(packet.getRouteName());

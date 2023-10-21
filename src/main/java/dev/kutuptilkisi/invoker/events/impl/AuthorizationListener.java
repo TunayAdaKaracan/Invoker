@@ -14,7 +14,7 @@ public class AuthorizationListener implements PacketListener {
     @PacketHandler
     public void onAuthorizationPacket(Client client, AuthorizationPacket packet){
         Logger.info("Authorization Packet Event for Client: "+client.getClientID());
-        if(Invoker.getInstance().getNetHandler().getAuthKey().equals(packet.getAuthKey())){
+        if(Invoker.invokerAPI.getNetHandler().getAuthKey().equals(packet.getAuthKey())){
             Logger.info("Authorization code matches...");
             client.setAuthorized();
 
@@ -23,7 +23,7 @@ public class AuthorizationListener implements PacketListener {
             informationPacket.setClientID(client.getClientID());
             client.send(informationPacket);
 
-            Invoker.getInstance().getNetHandler().addClient(client);
+            Invoker.invokerAPI.getNetHandler().addClient(client);
             return;
         }
         ServerRejectClientPacket rejectClientPacket = new ServerRejectClientPacket();

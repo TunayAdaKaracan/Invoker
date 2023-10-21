@@ -1,4 +1,4 @@
 name: Invoker
 version: '${project.version}'
-main: dev.kutuptilkisi.invoker.Invoker
+main: dev.kutuptilkisi.invoker.InvokerSpigot
 api-version: 1.16

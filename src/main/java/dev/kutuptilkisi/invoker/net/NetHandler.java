@@ -6,7 +6,6 @@ import dev.kutuptilkisi.invoker.net.packets.Packet;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientConnectPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientDisconnectPacket;
 import dev.kutuptilkisi.invoker.util.Logger;
-import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -87,19 +86,13 @@ public class NetHandler {
 
     public void addClient(Client client){
         ClientConnectPacket connectPacket = new ClientConnectPacket(client.getClientID());
-        Bukkit.getPluginManager().callEvent(connectPacket);
-        if(!connectPacket.isCancelled()){
-            this.clients.add(client);
-            broadcastPacket(new ClientConnectPacket(client.getClientID()));
-        } else {
-            client.close();
-        }
+        this.clients.add(client);
+        broadcastPacket(new ClientConnectPacket(client.getClientID()));
     }
 
     public void removeClient(Client client){
         if (clients.contains(client)) {
             this.clients.remove(client);
-            Bukkit.getPluginManager().callEvent(new ClientDisconnectPacket(client.getClientID()));
             broadcastPacket(new ClientDisconnectPacket(client.getClientID()));
         }
     }

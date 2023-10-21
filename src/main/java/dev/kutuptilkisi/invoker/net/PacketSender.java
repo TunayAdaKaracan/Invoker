@@ -13,7 +13,7 @@ import java.util.Map;
 public class PacketSender extends Thread {
     @Override
     public void run() {
-        NetHandler handler = Invoker.getInstance().getNetHandler();
+        NetHandler handler = Invoker.invokerAPI.getNetHandler();
         while(handler.isRunning()){
             if(handler.getPacketQueue().size() != 0){
                 for(Map.Entry<Client, List<Packet>> packetsToSend : handler.getPacketQueue().entrySet()){
