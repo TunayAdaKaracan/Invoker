@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RouteManager {
     private final List<RouteData> routes;
@@ -15,7 +16,7 @@ public class RouteManager {
     }
 
     public void addRoute(Routable routable){
-        for(Method method : Arrays.stream(routable.getClass().getDeclaredMethods()).filter(this::hasRouteAnnotation).toList()){
+        for(Method method : Arrays.stream(routable.getClass().getDeclaredMethods()).filter(this::hasRouteAnnotation).collect(Collectors.toList())){
             this.addRoute(getRouteData(routable, method));
         }
     }
