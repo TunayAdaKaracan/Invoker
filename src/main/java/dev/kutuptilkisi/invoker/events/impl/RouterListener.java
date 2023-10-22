@@ -40,6 +40,7 @@ public class RouterListener implements PacketListener {
             ret = routeData.executeRoute(argsToPass);
         } catch (InvocationTargetException | IllegalAccessException e) {
             RouteInvokeErrorPacket errorPacket = new RouteInvokeErrorPacket();
+            errorPacket.setRequestID(client.getRouteRequestCounter().getCount());
             errorPacket.setMessage(e.getMessage());
             client.send(errorPacket);
             return;
