@@ -6,6 +6,7 @@ import dev.kutuptilkisi.invoker.events.PacketListener;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.instance.Types;
 import dev.kutuptilkisi.invoker.net.packets.impl.incoming.RouteRequestPacket;
+import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.RouteInvokeErrorPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.RouteNotFoundPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.RouteResponsePacket;
 import dev.kutuptilkisi.invoker.router.impl.RouteData;
@@ -38,7 +39,10 @@ public class RouterListener implements PacketListener {
         try {
             ret = routeData.executeRoute(argsToPass);
         } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            RouteInvokeErrorPacket errorPacket = new RouteInvokeErrorPacket();
+            errorPacket.setMessage(e.getMessage());
+            client.send(errorPacket);
+            return;
         }
 
         RouteResponsePacket responsePacket = new RouteResponsePacket();
