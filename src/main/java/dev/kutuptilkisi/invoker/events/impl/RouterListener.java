@@ -43,6 +43,7 @@ public class RouterListener implements PacketListener {
             errorPacket.setRequestID(client.getRouteRequestCounter().getCount());
             errorPacket.setMessage(e.getMessage());
             client.send(errorPacket);
+            client.getRouteRequestCounter().increase();
             return;
         }
 
