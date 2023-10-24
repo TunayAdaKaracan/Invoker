@@ -5,6 +5,10 @@ import dev.kutuptilkisi.invoker.router.RouteManager;
 
 public class Invoker {
     public interface InvokerAPI {
+        interface Callable {
+            void call();
+        }
+
         // Config
         boolean getBoolean(String path);
         String getString(String path);
@@ -18,6 +22,8 @@ public class Invoker {
         void logInfo(String message);
         void logWarn(String message);
         void logSevere(String message);
+
+        void runOnScheduler(Callable callable);
     }
 
     public static InvokerAPI invokerAPI;

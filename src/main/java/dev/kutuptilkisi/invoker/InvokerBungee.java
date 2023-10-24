@@ -10,6 +10,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.concurrent.TimeUnit;
 
 public class InvokerBungee extends Plugin implements Invoker.InvokerAPI {
 
@@ -95,6 +96,11 @@ public class InvokerBungee extends Plugin implements Invoker.InvokerAPI {
     @Override
     public void logSevere(String message) {
         getLogger().severe(message);
+    }
+
+    @Override
+    public void runOnScheduler(Callable callable) {
+        getProxy().getScheduler().schedule(this, callable::call, 1L, TimeUnit.MILLISECONDS);
     }
 
 }

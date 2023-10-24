@@ -4,9 +4,10 @@ import dev.kutuptilkisi.invoker.net.packets.Packet;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 public class RouteNotFoundPacket implements Packet {
-    private int responseID;
+    private UUID responseUUID;
     private String routeName;
 
     @Override
@@ -18,14 +19,14 @@ public class RouteNotFoundPacket implements Packet {
         this.routeName = routeName;
     }
 
-    public void setResponseID(int responseID){
-        this.responseID = responseID;
+    public void setResponseID(UUID responseID){
+        this.responseUUID = responseID;
     }
 
     @Override
     public void write(DataOutputStream dos) throws IOException {
         Packet.super.write(dos);
-        dos.writeInt(responseID);
+        dos.writeUTF(responseUUID.toString());
         dos.writeUTF(routeName);
     }
 }

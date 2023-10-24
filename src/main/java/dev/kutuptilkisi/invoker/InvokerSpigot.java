@@ -2,6 +2,7 @@ package dev.kutuptilkisi.invoker;
 
 import dev.kutuptilkisi.invoker.net.NetHandler;
 import dev.kutuptilkisi.invoker.router.RouteManager;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -72,5 +73,10 @@ public final class InvokerSpigot extends JavaPlugin implements Invoker.InvokerAP
     @Override
     public void logSevere(String message) {
         getLogger().severe(message);
+    }
+
+    @Override
+    public void runOnScheduler(Callable callable) {
+        Bukkit.getScheduler().runTask(this, callable::call);
     }
 }

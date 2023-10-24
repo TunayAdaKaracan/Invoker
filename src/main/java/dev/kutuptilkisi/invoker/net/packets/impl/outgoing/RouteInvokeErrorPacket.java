@@ -4,17 +4,23 @@ import dev.kutuptilkisi.invoker.net.packets.Packet;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 public class RouteInvokeErrorPacket implements Packet {
-    private int requestID;
+    private UUID requestUUID;
+    private String routeName;
     private String message;
     @Override
     public int packetID() {
         return 0x0B;
     }
 
-    public void setRequestID(int requestID) {
-        this.requestID = requestID;
+    public void setRequestUUID(UUID requestUUID) {
+        this.requestUUID = requestUUID;
+    }
+
+    public void setRouteName(String routeName) {
+        this.routeName = routeName;
     }
 
     public void setMessage(String message) {
@@ -24,7 +30,8 @@ public class RouteInvokeErrorPacket implements Packet {
     @Override
     public void write(DataOutputStream dos) throws IOException {
         Packet.super.write(dos);
-        dos.writeInt(requestID);
+        dos.writeUTF(requestUUID.toString());
+        dos.writeUTF(routeName);
         dos.writeUTF(message);
     }
 }

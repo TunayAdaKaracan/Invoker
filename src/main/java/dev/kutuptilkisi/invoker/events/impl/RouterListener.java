@@ -22,9 +22,8 @@ public class RouterListener implements PacketListener {
         if(routeData == null){
             RouteNotFoundPacket routeNotFoundPacket = new RouteNotFoundPacket();
             routeNotFoundPacket.setRouteName(packet.getRouteName());
-            routeNotFoundPacket.setResponseID(client.getRouteRequestCounter().getCount());
+            routeNotFoundPacket.setResponseID(packet.getRequestUUID());
             client.send(routeNotFoundPacket);
-            client.getRouteRequestCounter().increase();
             return;
         }
 
@@ -40,19 +39,18 @@ public class RouterListener implements PacketListener {
             ret = routeData.executeRoute(argsToPass);
         } catch (InvocationTargetException | IllegalAccessException e) {
             RouteInvokeErrorPacket errorPacket = new RouteInvokeErrorPacket();
-            errorPacket.setRequestID(client.getRouteRequestCounter().getCount());
+            errorPacket.setRequestUUID(packet.getRequestUUID());
+            errorPacket.setRouteName(packet.getRouteName());
             errorPacket.setMessage(e.getMessage());
             client.send(errorPacket);
-            client.getRouteRequestCounter().increase();
             return;
         }
 
         RouteResponsePacket responsePacket = new RouteResponsePacket();
-        responsePacket.setResponseID(client.getRouteRequestCounter().getCount());
+        responsePacket.setResponseUUID(packet.getRequestUUID());
         responsePacket.setArgType(ret.getKey());
         responsePacket.setRouteName(packet.getRouteName());
         responsePacket.setArg(ret.getValue());
         client.send(responsePacket);
-        client.getRouteRequestCounter().increase();
     }
 }

@@ -16,15 +16,15 @@ public class ConnectionListener extends Thread {
                 Logger.info("Waiting for a new client");
                 Socket socket = handler.getServer().accept();
                 Client client = new Client(socket);
-                Logger.info("New client connected. Client ID: "+client.getClientID());
+                Logger.info("New client connected. Client ID: "+client.getClientUUID());
 
                 // TODO: Broadcast?
-                //UnauthorizedClientConnectPacket event = new UnauthorizedClientConnectPacket(client.getClientID());
-                Logger.info("Starting Packet Reader for Client: "+client.getClientID());
+                //UnauthorizedClientConnectPacket event = new UnauthorizedClientConnectPacket(client.getClientUUID());
+                Logger.info("Starting Packet Reader for Client: "+client.getClientUUID());
                 PacketReader reader = new PacketReader(client);
                 reader.setDaemon(true);
                 reader.start();
-                Logger.info("Started Packet Reader for Client: "+client.getClientID());
+                Logger.info("Started Packet Reader for Client: "+client.getClientUUID());
             } catch (IOException e) {
                 continue;
             }

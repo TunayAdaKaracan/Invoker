@@ -14,6 +14,7 @@ public interface Packet {
     default void send(Client client){
         Invoker.invokerAPI.getNetHandler().sendPacket(client, this);
     }
+
     default void broadcast(){
         Invoker.invokerAPI.getNetHandler().broadcastPacket(this);
     }

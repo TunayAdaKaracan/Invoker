@@ -4,6 +4,7 @@ import dev.kutuptilkisi.invoker.net.packets.Packet;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 public class ClientConnectPacket implements Packet {
 
@@ -14,9 +15,9 @@ public class ClientConnectPacket implements Packet {
     /*
         PACKET
      */
-    private int clientID;
-    public ClientConnectPacket(int clientID){
-        setClientID(clientID);
+    private UUID clientUUID;
+    public ClientConnectPacket(UUID clientUUID){
+        setClientUUID(clientUUID);
     }
 
     @Override
@@ -24,17 +25,13 @@ public class ClientConnectPacket implements Packet {
         return 0x01;
     }
 
-    public int getClientID() {
-        return clientID;
-    }
-
-    public void setClientID(int clientID) {
-        this.clientID = clientID;
+    public void setClientUUID(UUID clientUUID) {
+        this.clientUUID = clientUUID;
     }
 
     @Override
     public void write(DataOutputStream dos) throws IOException {
         Packet.super.write(dos);
-        dos.writeInt(clientID);
+        dos.writeUTF(clientUUID.toString());
     }
 }
