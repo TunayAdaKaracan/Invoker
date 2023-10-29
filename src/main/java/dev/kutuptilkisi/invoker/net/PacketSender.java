@@ -3,7 +3,6 @@ package dev.kutuptilkisi.invoker.net;
 import dev.kutuptilkisi.invoker.Invoker;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
-import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ServerRejectClientPacket;
 import dev.kutuptilkisi.invoker.util.Logger;
 
 import java.io.DataOutputStream;

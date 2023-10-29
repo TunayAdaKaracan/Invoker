@@ -10,15 +10,15 @@ import dev.kutuptilkisi.invoker.util.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class NetHandler {
     private final int PORT;
 
     private final ServerSocket server;
-    private volatile HashMap<Client, List<Packet>> packetQueue;
+    private ConcurrentHashMap<Client, List<Packet>> packetQueue;
     private volatile List<Client> clients;
 
     private final String authKey;
@@ -34,7 +34,7 @@ public class NetHandler {
 
         this.server = new ServerSocket(this.PORT);
 
-        this.packetQueue = new HashMap<>();
+        this.packetQueue = new ConcurrentHashMap<>();
         this.clients = new ArrayList<>();
         this.isRunning = false;
 
@@ -56,7 +56,7 @@ public class NetHandler {
         Logger.info("Started packet sender...");
     }
 
-    public HashMap<Client, List<Packet>> getPacketQueue() {
+    public ConcurrentHashMap<Client, List<Packet>> getPacketQueue() {
         return packetQueue;
     }
 
@@ -86,7 +86,6 @@ public class NetHandler {
     }
 
     public void addClient(Client client){
-        ClientConnectPacket connectPacket = new ClientConnectPacket(client.getClientUUID());
         this.clients.add(client);
         broadcastPacket(new ClientConnectPacket(client.getClientUUID()));
     }
