@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.Lock;
 
 public class NetHandler {
     private final int PORT;
 
     private final ServerSocket server;
     private ConcurrentHashMap<Client, List<Packet>> packetQueue;
+    private final Object packetQueueLock;
     private volatile List<Client> clients;
 
     private final String authKey;
@@ -39,6 +41,7 @@ public class NetHandler {
         this.isRunning = false;
 
         this.gson = new Gson();
+        this.packetQueueLock = new Object();
     }
 
     public void start(){
@@ -76,6 +79,10 @@ public class NetHandler {
         return gson;
     }
 
+    public Object getPacketQueueLock() {
+        return packetQueueLock;
+    }
+
     public Client getClient(UUID clientID){
         for(Client client : clients){
             if(client.getClientUUID() == clientID){
@@ -98,8 +105,10 @@ public class NetHandler {
     }
 
     public void sendPacket(Client client, Packet packet){
-        packetQueue.computeIfAbsent(client, v -> new ArrayList<>());
-        packetQueue.get(client).add(packet);
+        synchronized (packetQueueLock){
+            packetQueue.computeIfAbsent(client, v -> new ArrayList<>());
+            packetQueue.get(client).add(packet);
+        }
     }
 
     public void broadcastPacket(Packet packet){
