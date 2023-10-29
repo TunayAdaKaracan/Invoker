@@ -8,7 +8,7 @@ import dev.kutuptilkisi.invoker.net.packets.PacketFactory;
 import dev.kutuptilkisi.invoker.net.packets.impl.incoming.AuthorizationPacket;
 import dev.kutuptilkisi.invoker.util.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Event;
+
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -23,33 +23,30 @@ public class PacketReader extends Thread{
 
     @Override
     public void run() {
-        NetHandler handler = Invoker.getInstance().getNetHandler();
+        NetHandler handler = Invoker.invokerAPI.getNetHandler();
         while(handler.isRunning() && client.isConnected()){
             try {
-                Logger.info("Waiting packet for Client: "+client.getClientID());
+                Logger.info("Waiting packet for Client: "+client.getClientUUID());
                 int packetID = dataInputStream.readInt();
                 Packet packet = PacketFactory.fromId(packetID);
-                Logger.info("Found new packet with id of "+packetID+" for Client: "+client.getClientID());
+                Logger.info("Found new packet with id of "+packetID+" for Client: "+client.getClientUUID());
 
                 if(packet != null) {
                     packet.read(dataInputStream);
 
                     if(!client.isAuthorized() && !(packet instanceof AuthorizationPacket)){
-                        Logger.warning("Client is not authorized and packet is not AuthorizationPacket. Client ID: "+client.getClientID());
+                        Logger.warning("Client is not authorized and packet is not AuthorizationPacket. Client ID: "+client.getClientUUID());
                         dataInputStream.reset();
-                        continue;
+                        break;
                     }
 
                     EventRegistry.fireEvent(client, packet);
-                    if(packet instanceof Event) {
-                        Bukkit.getPluginManager().callEvent((Event) packet);
-                    }
                 } else {
-                    Logger.warning("Packet is unknown. Resetting datastream. Client ID: "+client.getClientID());
+                    Logger.warning("Packet is unknown. Resetting datastream. Client ID: "+client.getClientUUID());
                     dataInputStream.reset();
                 }
             } catch (IOException e) {
-                Logger.warning("Error on PacketReader: "+client.getClientID());
+                Logger.warning("Error on PacketReader: "+client.getClientUUID());
                 this.client.close();
             }
         }

@@ -33,7 +33,8 @@ public class RouteData {
         this.method.setAccessible(true);
         Object ret = this.method.invoke(this.routable, args);
         if(ret != null && Types.fromObject(ret) == null){
-            return new Pair<>(Types.STRING, Invoker.getInstance().getNetHandler().getGson().toJson(ret));
+            // TODO
+            return new Pair<>(Types.STRING, Invoker.invokerAPI.getNetHandler().getGson().toJson(ret));
         }
         return new Pair<>(Types.fromObject(ret), ret);
     }

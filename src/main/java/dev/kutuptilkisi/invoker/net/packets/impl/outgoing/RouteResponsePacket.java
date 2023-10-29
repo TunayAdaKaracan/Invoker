@@ -5,10 +5,11 @@ import dev.kutuptilkisi.invoker.net.packets.Packet;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 public class RouteResponsePacket implements Packet {
 
-    private int responseID;
+    private UUID responseUUID;
     private String routeName;
     private Types argType;
     private Object arg;
@@ -18,8 +19,8 @@ public class RouteResponsePacket implements Packet {
         return 0x06;
     }
 
-    public void setResponseID(int responseID){
-        this.responseID = responseID;
+    public void setResponseUUID(UUID responseID){
+        this.responseUUID = responseID;
     }
 
     public void setRouteName(String routeName) {
@@ -37,7 +38,7 @@ public class RouteResponsePacket implements Packet {
     @Override
     public void write(DataOutputStream dos) throws IOException {
         Packet.super.write(dos);
-        dos.writeInt(responseID);
+        dos.writeUTF(responseUUID.toString());
         dos.writeUTF(routeName);
         dos.writeUTF(argType != null ? String.valueOf(argType.getRepresentation()) : "V");
         if(argType != null){

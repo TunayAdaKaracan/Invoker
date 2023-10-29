@@ -6,13 +6,13 @@ import dev.kutuptilkisi.invoker.net.packets.Packet;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientConnectPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientDisconnectPacket;
 import dev.kutuptilkisi.invoker.util.Logger;
-import org.bukkit.Bukkit;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class NetHandler {
     private final int PORT;
@@ -76,9 +76,9 @@ public class NetHandler {
         return gson;
     }
 
-    public Client getClient(int clientID){
+    public Client getClient(UUID clientID){
         for(Client client : clients){
-            if(client.getClientID() == clientID){
+            if(client.getClientUUID() == clientID){
                 return client;
             }
         }
@@ -86,21 +86,15 @@ public class NetHandler {
     }
 
     public void addClient(Client client){
-        ClientConnectPacket connectPacket = new ClientConnectPacket(client.getClientID());
-        Bukkit.getPluginManager().callEvent(connectPacket);
-        if(!connectPacket.isCancelled()){
-            this.clients.add(client);
-            broadcastPacket(new ClientConnectPacket(client.getClientID()));
-        } else {
-            client.close();
-        }
+        ClientConnectPacket connectPacket = new ClientConnectPacket(client.getClientUUID());
+        this.clients.add(client);
+        broadcastPacket(new ClientConnectPacket(client.getClientUUID()));
     }
 
     public void removeClient(Client client){
         if (clients.contains(client)) {
             this.clients.remove(client);
-            Bukkit.getPluginManager().callEvent(new ClientDisconnectPacket(client.getClientID()));
-            broadcastPacket(new ClientDisconnectPacket(client.getClientID()));
+            broadcastPacket(new ClientDisconnectPacket(client.getClientUUID()));
         }
     }
 

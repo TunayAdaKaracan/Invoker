@@ -29,7 +29,7 @@ public class ClientIntents {
         clientIntents.enable(0x06);
         clientIntents.enable(0x03);
         clientIntents.enable(0x09);
-        clientIntents.enable(0x00);
+        clientIntents.enable(0x0B);
 
         return clientIntents;
     }

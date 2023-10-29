@@ -6,6 +6,7 @@ import dev.kutuptilkisi.invoker.events.PacketListener;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.instance.Types;
 import dev.kutuptilkisi.invoker.net.packets.impl.incoming.RouteRequestPacket;
+import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.RouteInvokeErrorPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.RouteNotFoundPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.RouteResponsePacket;
 import dev.kutuptilkisi.invoker.router.impl.RouteData;
@@ -17,13 +18,12 @@ public class RouterListener implements PacketListener {
 
     @PacketHandler
     public void onRouteRequest(Client client, RouteRequestPacket packet){
-        RouteData routeData = Invoker.getInstance().getRouteManager().getRouteOrNull(packet.getRouteName());
+        RouteData routeData = Invoker.invokerAPI.getRouteManager().getRouteOrNull(packet.getRouteName());
         if(routeData == null){
             RouteNotFoundPacket routeNotFoundPacket = new RouteNotFoundPacket();
             routeNotFoundPacket.setRouteName(packet.getRouteName());
-            routeNotFoundPacket.setResponseID(client.getRouteRequestCounter().getCount());
+            routeNotFoundPacket.setResponseID(packet.getRequestUUID());
             client.send(routeNotFoundPacket);
-            client.getRouteRequestCounter().increase();
             return;
         }
 
@@ -38,15 +38,19 @@ public class RouterListener implements PacketListener {
         try {
             ret = routeData.executeRoute(argsToPass);
         } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            RouteInvokeErrorPacket errorPacket = new RouteInvokeErrorPacket();
+            errorPacket.setRequestUUID(packet.getRequestUUID());
+            errorPacket.setRouteName(packet.getRouteName());
+            errorPacket.setMessage(e.getMessage());
+            client.send(errorPacket);
+            return;
         }
 
         RouteResponsePacket responsePacket = new RouteResponsePacket();
-        responsePacket.setResponseID(client.getRouteRequestCounter().getCount());
+        responsePacket.setResponseUUID(packet.getRequestUUID());
         responsePacket.setArgType(ret.getKey());
         responsePacket.setRouteName(packet.getRouteName());
         responsePacket.setArg(ret.getValue());
         client.send(responsePacket);
-        client.getRouteRequestCounter().increase();
     }
 }

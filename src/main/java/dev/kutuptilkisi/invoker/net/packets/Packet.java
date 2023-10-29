@@ -12,10 +12,11 @@ public interface Packet {
     int packetID();
 
     default void send(Client client){
-        Invoker.getInstance().getNetHandler().sendPacket(client, this);
+        Invoker.invokerAPI.getNetHandler().sendPacket(client, this);
     }
+
     default void broadcast(){
-        Invoker.getInstance().getNetHandler().broadcastPacket(this);
+        Invoker.invokerAPI.getNetHandler().broadcastPacket(this);
     }
 
     default void write(DataOutputStream dos) throws IOException {

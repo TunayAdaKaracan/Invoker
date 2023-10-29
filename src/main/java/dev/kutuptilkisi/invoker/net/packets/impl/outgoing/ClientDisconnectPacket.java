@@ -1,24 +1,16 @@
 package dev.kutuptilkisi.invoker.net.packets.impl.outgoing;
 
 import dev.kutuptilkisi.invoker.net.packets.Packet;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
-public class ClientDisconnectPacket extends Event implements Packet {
-    private static final HandlerList HANDLERS = new HandlerList();
-    @Override
-    public HandlerList getHandlers() {
-        return HANDLERS;
-    }
+public class ClientDisconnectPacket implements Packet {
+    private UUID clientUUID;
 
-    private int clientID;
-
-    public ClientDisconnectPacket(int clientID){
-        super(true);
-        setClientID(clientID);
+    public ClientDisconnectPacket(UUID clientUUID){
+        setClientUUID(clientUUID);
     }
 
     @Override
@@ -26,17 +18,13 @@ public class ClientDisconnectPacket extends Event implements Packet {
         return 0x02;
     }
 
-    public int getClientID() {
-        return clientID;
-    }
-
-    public void setClientID(int clientID) {
-        this.clientID = clientID;
+    public void setClientUUID(UUID clientUUID) {
+        this.clientUUID = clientUUID;
     }
 
     @Override
     public void write(DataOutputStream dos) throws IOException {
         Packet.super.write(dos);
-        dos.writeInt(clientID);
+        dos.writeUTF(clientUUID.toString());
     }
 }

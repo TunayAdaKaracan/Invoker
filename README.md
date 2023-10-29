@@ -26,7 +26,7 @@ Routables are the essential and most important part of the Invoker. You can add 
 ```
 You can register a route to invoker by simply doing:
 ```java
-Invoker.getInstance().getRouteManager().addRoute(new PlayerRoute());
+Invoker.invokerApi.getRouteManager().addRoute(new PlayerRoute());
 ```
 
 Example usage from python-invoker:
@@ -57,7 +57,7 @@ With your own packets of course!
 **Incoming Packets**:
 Lets say you want to make a BanPlayerPacket and for some reason you don't want to use a route for that. This is how you can create a packet:
 ```java
-public class BanPlayerPacket implements Packet { // Every incoming packet can also extend Bukkit Event. They are fired automatically.
+public class BanPlayerPacket implements Packet {
 
     private String userName;
 
@@ -171,10 +171,10 @@ public class PlayerChatListener implements Listener {
         chatPacket.broadcast();
 
         // Nethandler#broadcast
-        Invoker.getInstance().getNetHandler().broadcastPacket(chatPacket);
+        Invoker.invokerApi.getNetHandler().broadcastPacket(chatPacket);
 
         // Send to a client
-        Client client = Invoker.getInstance().getNetHandler().getClient(0); // Get first connected client
+        Client client = Invoker.invokerApi.getNetHandler().getClient(0); // Get first connected client
         if(client != null){
             // Client#send
             client.send(chatPacket);
@@ -183,7 +183,7 @@ public class PlayerChatListener implements Listener {
             chatPacket.send(client);
 
             // NetHandler#sendPacket
-            Invoker.getInstance().getNetHandler().sendPacket(client, chatPacket);
+            Invoker.invokerApi.getNetHandler().sendPacket(client, chatPacket);
         }
     }
 }
@@ -195,7 +195,7 @@ This is why invoker is actually a powerfull tool to use.
 ### Todo:
 
  - [x] Fix Protocol
- - [ ] Add Websocket Support
+ - [ ] Add HTTP & SSE support for web applications.
  - [ ] Create more official wrappers
  - [x] Fix EventRegistry
 

@@ -1,0 +1,4 @@
+name: Invoker
+main: dev.kutuptilkisi.invoker.InvokerBungee
+version: 1.0.0
+author: "Kutup Tilkisi"

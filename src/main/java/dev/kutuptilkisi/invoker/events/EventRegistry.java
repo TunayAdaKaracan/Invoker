@@ -9,6 +9,7 @@ import dev.kutuptilkisi.invoker.net.packets.Packet;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class EventRegistry {
     private static HashMap<Class<? extends Packet>, Map.Entry<PacketListener, List<Method>>> eventCallbacks = new HashMap<>();
@@ -20,7 +21,7 @@ public class EventRegistry {
     }
 
     public static void registerEvent(PacketListener o){
-        for(Method method : Arrays.stream(o.getClass().getMethods()).filter(method -> method.isAnnotationPresent(PacketHandler.class)).toList()){
+        for(Method method : Arrays.stream(o.getClass().getMethods()).filter(method -> method.isAnnotationPresent(PacketHandler.class)).collect(Collectors.toList())){
             if(method.getParameterCount() == 2){
                 Class<?>[] types = method.getParameterTypes();
                 if(types[0] == Client.class && isImplementingPaketInterface(types[1])){
