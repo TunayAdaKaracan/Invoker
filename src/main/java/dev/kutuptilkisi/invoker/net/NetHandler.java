@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 
 public class NetHandler {
@@ -21,7 +22,7 @@ public class NetHandler {
     private final ServerSocket server;
     private ConcurrentHashMap<Client, List<Packet>> packetQueue;
     private final Object packetQueueLock;
-    private volatile List<Client> clients;
+    private volatile CopyOnWriteArrayList<Client> clients;
 
     private final String authKey;
 
@@ -37,7 +38,7 @@ public class NetHandler {
         this.server = new ServerSocket(this.PORT);
 
         this.packetQueue = new ConcurrentHashMap<>();
-        this.clients = new ArrayList<>();
+        this.clients = new CopyOnWriteArrayList<>();
         this.isRunning = false;
 
         this.gson = new Gson();
