@@ -1,3 +1,5 @@
+# Legacy is dropped. No more updates will come to invoker-legacy. Use new version instead.
+
 # Invoker
 Invoker is a remote communication library for bukkit and softwares. Invoker uses sockets to communicate with plugin on server side. Invoker is highly developer friendly and is easy to use as well as easy to extend and add new features such as new packets to plugin. <br>
 [![](https://jitpack.io/v/TunayAdaKaracan/Invoker.svg)](https://jitpack.io/#TunayAdaKaracan/Invoker)
