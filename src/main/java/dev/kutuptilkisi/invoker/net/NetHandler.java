@@ -5,10 +5,13 @@ import dev.kutuptilkisi.invoker.instance.ClientRequest;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientConnectPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientDisconnectPacket;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelId;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.io.IOException;
@@ -20,6 +23,9 @@ public class NetHandler {
     private final ChannelGroup clients;
     private final Gson gson;
 
+    private EventLoopGroup bossGroup;
+    private EventLoopGroup workerGroup;
+
 
     public NetHandler(int port, String authKey) throws IOException {
         this.PORT = port;
@@ -30,7 +36,33 @@ public class NetHandler {
     }
 
     public void start(){
+        new Thread(() -> {
+            bossGroup = new NioEventLoopGroup();
+            workerGroup = new NioEventLoopGroup();
+            try {
+                ServerBootstrap b = new ServerBootstrap();
+                b.group(bossGroup, workerGroup)
+                        .channel(NioServerSocketChannel.class)
+                        .childHandler(new ChannelInitializer<SocketChannel>() {
+                            @Override
+                            public void initChannel(SocketChannel ch)
+                                    throws Exception {
+                                ch.pipeline().addLast(new PacketDecoder(),
+                                        new PacketEncoder(),
+                                        new PacketProcessor());
+                            }
+                        }).option(ChannelOption.SO_BACKLOG, 128)
+                        .childOption(ChannelOption.SO_KEEPALIVE, true);
 
+                ChannelFuture f = b.bind(PORT).sync().channel().closeFuture().sync();
+            } catch (InterruptedException e) {
+                workerGroup.shutdownGracefully();
+                bossGroup.shutdownGracefully();
+            } finally {
+                workerGroup.shutdownGracefully();
+                bossGroup.shutdownGracefully();
+            }
+        }).start();
     }
 
     public String getAuthKey() {
@@ -71,6 +103,9 @@ public class NetHandler {
     }
 
     public void close(){
-
+        workerGroup.shutdownGracefully();
+        bossGroup.shutdownGracefully();
+        workerGroup = null;
+        bossGroup = null;
     }
 }
