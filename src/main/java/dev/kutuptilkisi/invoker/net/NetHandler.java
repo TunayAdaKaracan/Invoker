@@ -5,6 +5,8 @@ import dev.kutuptilkisi.invoker.instance.ClientRequest;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientConnectPacket;
 import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ClientDisconnectPacket;
+import dev.kutuptilkisi.invoker.util.AuthUtil;
+import dev.kutuptilkisi.invoker.util.IntentsUtil;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
@@ -107,5 +109,8 @@ public class NetHandler {
         bossGroup.shutdownGracefully();
         workerGroup = null;
         bossGroup = null;
+        IntentsUtil.clear();
+        AuthUtil.clear();
+        clients.clear();
     }
 }

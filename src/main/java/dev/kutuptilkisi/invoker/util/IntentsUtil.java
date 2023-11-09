@@ -25,4 +25,8 @@ public class IntentsUtil {
     public static void remove(ChannelId channelId){
         intentsMap.remove(channelId);
     }
+
+    public static void clear(){
+        intentsMap.clear();
+    }
 }

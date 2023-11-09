@@ -18,4 +18,8 @@ public class AuthUtil {
     public static void remove(ChannelId channelId){
         authorized.remove(channelId);
     }
+
+    public static void clear(){
+        authorized.clear();
+    }
 }
