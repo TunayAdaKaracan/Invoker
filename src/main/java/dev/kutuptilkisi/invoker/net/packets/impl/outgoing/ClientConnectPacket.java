@@ -1,23 +1,16 @@
 package dev.kutuptilkisi.invoker.net.packets.impl.outgoing;
 
 import dev.kutuptilkisi.invoker.net.packets.Packet;
-
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.UUID;
+import dev.kutuptilkisi.invoker.util.ByteBufUtil;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelId;
 
 public class ClientConnectPacket implements Packet {
 
-    /*
-        EVENTS
-     */
-    private boolean isCancelled;
-    /*
-        PACKET
-     */
-    private UUID clientUUID;
-    public ClientConnectPacket(UUID clientUUID){
-        setClientUUID(clientUUID);
+    private ChannelId clientId;
+
+    public ClientConnectPacket(ChannelId clientId){
+        setClientUUID(clientId);
     }
 
     @Override
@@ -25,13 +18,12 @@ public class ClientConnectPacket implements Packet {
         return 0x01;
     }
 
-    public void setClientUUID(UUID clientUUID) {
-        this.clientUUID = clientUUID;
+    public void setClientUUID(ChannelId clientId) {
+        this.clientId = clientId;
     }
 
     @Override
-    public void write(DataOutputStream dos) throws IOException {
-        Packet.super.write(dos);
-        dos.writeUTF(clientUUID.toString());
+    public void write(ByteBuf dos) {
+        ByteBufUtil.writeString(dos, clientId.asShortText());
     }
 }

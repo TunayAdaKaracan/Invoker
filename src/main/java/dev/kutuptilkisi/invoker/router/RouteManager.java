@@ -17,7 +17,8 @@ public class RouteManager {
 
     public void addRoute(Routable routable){
         for(Method method : Arrays.stream(routable.getClass().getDeclaredMethods()).filter(this::hasRouteAnnotation).collect(Collectors.toList())){
-            this.addRoute(getRouteData(routable, method));
+            RouteData routeData = getRouteData(routable, method);
+            if(routeData != null) this.addRoute(routeData);
         }
     }
 

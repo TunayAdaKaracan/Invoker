@@ -1,27 +1,26 @@
 package dev.kutuptilkisi.invoker.net.packets.impl.outgoing;
 
 import dev.kutuptilkisi.invoker.net.packets.Packet;
+import dev.kutuptilkisi.invoker.util.ByteBufUtil;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelId;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.util.UUID;
 
 public class InformationPacket implements Packet {
 
-    private UUID clientUUID;
+    private ChannelId channelId;
 
     @Override
     public int packetID() {
         return 0x08;
     }
 
-    public void setClientID(UUID clientUUID) {
-        this.clientUUID = clientUUID;
+    public void setClientID(ChannelId channelId) {
+        this.channelId = channelId;
     }
 
     @Override
-    public void write(DataOutputStream dos) throws IOException {
-        Packet.super.write(dos);
-        dos.writeUTF(clientUUID.toString());
+    public void write(ByteBuf byteBuf) {
+        ByteBufUtil.writeString(byteBuf, channelId.asShortText());
     }
 }

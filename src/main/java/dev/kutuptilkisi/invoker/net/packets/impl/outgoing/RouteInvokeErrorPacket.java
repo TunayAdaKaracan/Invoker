@@ -1,9 +1,9 @@
 package dev.kutuptilkisi.invoker.net.packets.impl.outgoing;
 
 import dev.kutuptilkisi.invoker.net.packets.Packet;
+import dev.kutuptilkisi.invoker.util.ByteBufUtil;
+import io.netty.buffer.ByteBuf;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.UUID;
 
 public class RouteInvokeErrorPacket implements Packet {
@@ -28,10 +28,9 @@ public class RouteInvokeErrorPacket implements Packet {
     }
 
     @Override
-    public void write(DataOutputStream dos) throws IOException {
-        Packet.super.write(dos);
-        dos.writeUTF(requestUUID.toString());
-        dos.writeUTF(routeName);
-        dos.writeUTF(message);
+    public void write(ByteBuf byteBuf)  {
+        ByteBufUtil.writeUUID(byteBuf, requestUUID);
+        ByteBufUtil.writeString(byteBuf, routeName);
+        ByteBufUtil.writeString(byteBuf, message);
     }
 }

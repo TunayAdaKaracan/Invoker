@@ -1,9 +1,7 @@
 package dev.kutuptilkisi.invoker.net.packets.impl.incoming;
 
 import dev.kutuptilkisi.invoker.net.packets.Packet;
-
-import java.io.DataInputStream;
-import java.io.IOException;
+import io.netty.buffer.ByteBuf;
 
 public class EnableCustomPacketPacket implements Packet {
     private int packetID;
@@ -14,8 +12,8 @@ public class EnableCustomPacketPacket implements Packet {
     }
 
     @Override
-    public void read(DataInputStream dis) throws IOException {
-        packetID = dis.readInt();
+    public void read(ByteBuf byteBuf){
+        packetID = byteBuf.readInt();
     }
 
     public int getCustomPacketID() {

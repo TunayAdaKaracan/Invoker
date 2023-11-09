@@ -1,12 +1,10 @@
 package dev.kutuptilkisi.invoker.util.typeio;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import io.netty.buffer.ByteBuf;
 
 public interface TypeIO {
     boolean fromClass(Object obj);
-    Object read(DataInputStream dataInputStream) throws IOException;
+    Object read(ByteBuf byteBuf);
 
-    void write(DataOutputStream dataOutputStream, Object arg) throws IOException;
+    void write(ByteBuf byteBuf, Object arg);
 }

@@ -3,7 +3,7 @@ package dev.kutuptilkisi.invoker.events;
 import dev.kutuptilkisi.invoker.events.impl.AuthorizationListener;
 import dev.kutuptilkisi.invoker.events.impl.PacketEnableListener;
 import dev.kutuptilkisi.invoker.events.impl.RouterListener;
-import dev.kutuptilkisi.invoker.instance.Client;
+import dev.kutuptilkisi.invoker.instance.ClientRequest;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +24,7 @@ public class EventRegistry {
         for(Method method : Arrays.stream(o.getClass().getMethods()).filter(method -> method.isAnnotationPresent(PacketHandler.class)).collect(Collectors.toList())){
             if(method.getParameterCount() == 2){
                 Class<?>[] types = method.getParameterTypes();
-                if(types[0] == Client.class && isImplementingPaketInterface(types[1])){
+                if(types[0] == ClientRequest.class && isImplementingPaketInterface(types[1])){
                     Class<? extends Packet> packetClass = (Class<? extends Packet>) types[1];
 
                     if(!eventCallbacks.containsKey(packetClass)){
@@ -37,11 +37,11 @@ public class EventRegistry {
         }
     }
 
-    public static void fireEvent(Client client, Packet packet){
+    public static void fireEvent(ClientRequest clientRequest, Packet packet){
         if(eventCallbacks.containsKey(packet.getClass())){
             for(Method method : eventCallbacks.get(packet.getClass()).getValue()){
                 try {
-                    method.invoke(eventCallbacks.get(packet.getClass()).getKey(), client, packet);
+                    method.invoke(eventCallbacks.get(packet.getClass()).getKey(), clientRequest, packet);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }

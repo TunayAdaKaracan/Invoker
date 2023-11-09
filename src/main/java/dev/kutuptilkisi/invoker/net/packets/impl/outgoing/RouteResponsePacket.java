@@ -2,9 +2,9 @@ package dev.kutuptilkisi.invoker.net.packets.impl.outgoing;
 
 import dev.kutuptilkisi.invoker.instance.Types;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
+import dev.kutuptilkisi.invoker.util.ByteBufUtil;
+import io.netty.buffer.ByteBuf;
 
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.UUID;
 
 public class RouteResponsePacket implements Packet {
@@ -36,13 +36,12 @@ public class RouteResponsePacket implements Packet {
     }
 
     @Override
-    public void write(DataOutputStream dos) throws IOException {
-        Packet.super.write(dos);
-        dos.writeUTF(responseUUID.toString());
-        dos.writeUTF(routeName);
-        dos.writeUTF(argType != null ? String.valueOf(argType.getRepresentation()) : "V");
+    public void write(ByteBuf byteBuf) {
+        ByteBufUtil.writeUUID(byteBuf, responseUUID);
+        ByteBufUtil.writeString(byteBuf, routeName);
+        ByteBufUtil.writeString(byteBuf, argType != null ? String.valueOf(argType.getRepresentation()) : "V");
         if(argType != null){
-            argType.getTypeIO().write(dos, arg);
+            argType.getTypeIO().write(byteBuf, arg);
         }
     }
 }
