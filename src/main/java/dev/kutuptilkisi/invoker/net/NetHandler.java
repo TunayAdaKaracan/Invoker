@@ -10,16 +10,19 @@ import dev.kutuptilkisi.invoker.util.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Lock;
 
 public class NetHandler {
     private final int PORT;
 
     private final ServerSocket server;
-    private volatile HashMap<Client, List<Packet>> packetQueue;
-    private volatile List<Client> clients;
+    private ConcurrentHashMap<Client, List<Packet>> packetQueue;
+    private final Object packetQueueLock;
+    private volatile CopyOnWriteArrayList<Client> clients;
 
     private final String authKey;
 
@@ -34,11 +37,12 @@ public class NetHandler {
 
         this.server = new ServerSocket(this.PORT);
 
-        this.packetQueue = new HashMap<>();
-        this.clients = new ArrayList<>();
+        this.packetQueue = new ConcurrentHashMap<>();
+        this.clients = new CopyOnWriteArrayList<>();
         this.isRunning = false;
 
         this.gson = new Gson();
+        this.packetQueueLock = new Object();
     }
 
     public void start(){
@@ -56,7 +60,7 @@ public class NetHandler {
         Logger.info("Started packet sender...");
     }
 
-    public HashMap<Client, List<Packet>> getPacketQueue() {
+    public ConcurrentHashMap<Client, List<Packet>> getPacketQueue() {
         return packetQueue;
     }
 
@@ -76,6 +80,10 @@ public class NetHandler {
         return gson;
     }
 
+    public Object getPacketQueueLock() {
+        return packetQueueLock;
+    }
+
     public Client getClient(UUID clientID){
         for(Client client : clients){
             if(client.getClientUUID() == clientID){
@@ -86,7 +94,6 @@ public class NetHandler {
     }
 
     public void addClient(Client client){
-        ClientConnectPacket connectPacket = new ClientConnectPacket(client.getClientUUID());
         this.clients.add(client);
         broadcastPacket(new ClientConnectPacket(client.getClientUUID()));
     }
@@ -99,8 +106,10 @@ public class NetHandler {
     }
 
     public void sendPacket(Client client, Packet packet){
-        packetQueue.computeIfAbsent(client, v -> new ArrayList<>());
-        packetQueue.get(client).add(packet);
+        synchronized (packetQueueLock){
+            packetQueue.computeIfAbsent(client, v -> new ArrayList<>());
+            packetQueue.get(client).add(packet);
+        }
     }
 
     public void broadcastPacket(Packet packet){

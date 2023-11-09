@@ -3,7 +3,6 @@ package dev.kutuptilkisi.invoker.net;
 import dev.kutuptilkisi.invoker.Invoker;
 import dev.kutuptilkisi.invoker.instance.Client;
 import dev.kutuptilkisi.invoker.net.packets.Packet;
-import dev.kutuptilkisi.invoker.net.packets.impl.outgoing.ServerRejectClientPacket;
 import dev.kutuptilkisi.invoker.util.Logger;
 
 import java.io.DataOutputStream;
@@ -16,27 +15,29 @@ public class PacketSender extends Thread {
     public void run() {
         NetHandler handler = Invoker.invokerAPI.getNetHandler();
         while(handler.isRunning()){
-            if(handler.getPacketQueue().size() != 0){
-                for(Map.Entry<Client, List<Packet>> packetsToSend : handler.getPacketQueue().entrySet()){
-                    Client client = packetsToSend.getKey();
-                    try {
-                        DataOutputStream dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
-                        for(Packet packet : packetsToSend.getValue()){
-                            if(client.getClientIntents().isEnabled(packet.packetID())){
-                                Logger.info("Sending packet "+ packet.packetID() +" to client "+client.getClientUUID());
-                                packet.write(dataOutputStream);
-                            }else {
-                                Logger.info("Skipped packet of "+packet.packetID()+" as it is not in client's intents.");
-                            }
+            synchronized (handler.getPacketQueueLock()) {
+                if (handler.getPacketQueue().size() != 0) {
+                    for (Map.Entry<Client, List<Packet>> packetsToSend : handler.getPacketQueue().entrySet()) {
+                        Client client = packetsToSend.getKey();
+                        try {
+                            DataOutputStream dataOutputStream = new DataOutputStream(client.getSocket().getOutputStream());
+                            for (Packet packet : packetsToSend.getValue()) {
+                                if (client.getClientIntents().isEnabled(packet.packetID())) {
+                                    Logger.info("Sending packet " + packet.packetID() + " to client " + client.getClientUUID());
+                                    packet.write(dataOutputStream);
+                                } else {
+                                    Logger.info("Skipped packet of " + packet.packetID() + " as it is not in client's intents.");
+                                }
 
+                            }
+                            dataOutputStream.flush();
+                        } catch (IOException e) {
+                            Logger.warning("Error on PacketSender: " + client.getClientUUID());
+                            client.close();
                         }
-                        dataOutputStream.flush();
-                    } catch (IOException e) {
-                        Logger.warning("Error on PacketSender: "+client.getClientUUID());
-                        client.close();
                     }
+                    handler.getPacketQueue().clear();
                 }
-                handler.getPacketQueue().clear();
             }
         }
     }
