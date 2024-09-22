@@ -16,6 +16,7 @@ public class PacketDecoder extends ReplayingDecoder<Packet> {
             packet.read(byteBuf);
             list.add(packet);
         } else {
+            // TODO: Close the connection
             byteBuf.resetReaderIndex();
         }
     }
